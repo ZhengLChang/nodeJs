@@ -1,0 +1,10 @@
+{
+    "name":"ATCOM Provision Tool", //这里的name属性很重要，类似唯一标示。不可少！
+    "main":"http://127.0.0.1:8989/index.html", //窗口要渲染的文件
+    "nodejs":true,    //true,为启用nodejs
+    "node-main":"webServer.js", //nodejs的入口文件
+    "window":{    //简单的设置了一个属性
+        "width":800,
+        "height":500
+    }
+}

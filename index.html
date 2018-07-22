@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+	<script type="text/javascript" src="/jquery.js"></script>
+	<script type="text/javascript" src="/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/helper.js"></script>
+	<script type="text/javascript" src="/json2.min.js"></script>
+	<script type="text/javascript" src="/jquery.atcom.js"></script>
+	<script type="text/javascript" src="/underscore-min.js"></script>
+	<script type="text/javascript" src="/language-en.js"></script>
+	<script type="text/javascript" src="/main.js"></script>
+	<link rel="stylesheet" type="text/css" href="easyui.css"/>
+	<meta charset="utf-8">
+	<title>ATCOM Provision Tool</title>
+	<script type="text/javascript">
+		$(document).ready(function(){
+				/*
+			var defaultSetting = {
+				url: '/',
+				data: '',
+				async: true,
+				returnHtml: false,
+				success: function(){},
+				complete: function(){}
+			    	},
+			postJSON = function(options){
+				var settings = $.extend({}, defaultSetting, options);
+				var queryString;
+				if(String(settings.data).length > 0)
+				{
+					queryString = String(settings.data) + "&" + settings.url.substr(settings.url.lastIndexOf("?") + 1);
+				}
+				else
+				{
+				queryString = settings.url.substr(settings.url.lastIndexOf("?") + 1);
+	}
+    	$.ajax({
+    		url: settings.url,
+			type: 'POST',
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			data: queryString,
+			dataType: 'text',
+			async: settings.async,
+    		success: function(datas) {
+    			try {
+    				var data;
+    				
+    				if(/webUserChange/.test(datas)){
+    					data = JSON.parse(datas); 
+    					if(data.webUserChange){
+    						var urls = location.href.split('/');
+    						urls.length = 3;
+    						urls[1] = '//';
+    						window.location.assign(urls.join(''));
+    						return;
+    					}
+    				}    				
+					if (!settings.returnHtml) {
+            			data = JSON.parse(datas);
+            			if(data.return_code && data.return_code !== 0){
+            				AlertUtil.alertMsg(ErrorUtil.getErrorPrompt(data.return_code, data.return_prompt));
+						} else {
+							settings.success(data);
+						}
+					} else {
+        				// 返回HTML不用解析
+						data = datas;
+						settings.success(data);
+					}								
+					
+    			} catch(ex) {
+    				AlertUtil.alertMsg(ex.message);
+    			}finally{
+				console.log(queryString);
+				console.log(datas);
+			}
+    			settings.complete();
+    		},
+    		error: function(xhr, textStatus, error) {
+    			if ($.isFunction(settings.error)) {
+					settings.error(xhr, textStatus, error);
+				}
+    			settings.complete();
+    		}
+    	});
+    };
+    */
+		var $form = $("#form1");
+		$("#submit").click(function(){
+			var json = JSON.parmsToJSON($form);
+			Page.postJSON({
+				url: '/createFile.cgi',
+				data: JSON.serializeToParms(json),
+				success: function(data){
+					AlertUtil.saveSuccess();
+				}
+			});
+		});
+		});
+	</script>
+</head>
+<body>
+	<form id="form1">
+		<table>
+		<tbody>
+			<tr>
+				<td>Create File Number<td>
+				<td>
+					<input type="text" id="createFileNum" name="createFileNum" maxlength="3"/>
+				</td>
+			</tr>
+			<tr>
+				<td>First Account<td>
+				<td>
+					<input type="text" id="firstAccount" name="firstAccount"/>
+				</td>
+			</tr>
+			<tr>
+				<td>First MAC Address<td>
+				<td>
+					<input type="text" id="firstMacAddr" name="firstMacAddr"/>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</form>
+	<input type="submit" id="submit">
+	<!--form method="post">
+	   网站名： <input name="name"><br>
+	   网站 URL： <input name="url"><br>
+	       <input type="submit" value="submit">
+	</form-->
+</body>
+</html>
+
+
+<!--html lang="en">
+<head>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="/jquery.js"></script>
+	<title>ATCOM Provision Tool</title>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#box").css({"background-color": "pink"});
+		});
+	</script>
+</head>
+<body>
+	<div style="padding: 10px 10px;" id="box">
+		<div>
+		</div>
+	</div>
+</body>
+</html-->

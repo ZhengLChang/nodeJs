@@ -19,14 +19,24 @@ var postHTML =
 var server = http.createServer(function(req, res){
 		var pathname = __dirname+url.parse(req.url).pathname;
 		var body = "";
+		var buffers = [];
+		var nread = 0;
 
 		req.on('data', function(chunk){
-			body += chunk; 
-			console.log(chunk);
+		try{
+			body += chunk;
+			/*
+			buffers.push(chunk);
+			nread += chunk.length;
+			*/
+		}
+		catch(err)
+		{
+			console.log(err.message);
+			}
 		});
 		req.on('end', function(){
-			console.log(body);
-		});
+			try{
 
 		if(path.extname(pathname) == '.cgi')
 		{
@@ -35,8 +45,14 @@ var server = http.createServer(function(req, res){
 				firstMacAddr;
 			body = querystring.parse(body);
 			res.writeHead(200, {"Content-Type": "text/plain"});
+
+			createFileNum = body.createFileNum;
+			firstAccount = body.firstAccount;
+			firstMacAddr = body.firstMacAddr;
 			
-			console.log("body: ", body);
+			console.log("crete File Num: " + createFileNum);
+			console.log("first account: " + firstAccount);
+			console.log("firstMacAddr: " + firstMacAddr);
 			res.end('{"return_code": 0,"return_prompt": "Success"}');
 			return;
 		}
@@ -81,6 +97,14 @@ var server = http.createServer(function(req, res){
 				res.writeHead(404, {"Content-Type": "text/html"});
 				res.end("<h1>404 Not Found</h1>");
 			}
+		});
+			}catch(error){
+				console.log(error.message);
+				res.writeHead(200, {"Content-Type": "text/plain"});
+				res.end('{"return_code": 0,"return_prompt": "Success"}');
+
+			}
+
 		});
 		/*
 		res.setHeader('Content-Type', 'text/plain');

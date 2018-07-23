@@ -88,11 +88,43 @@
 		var $form = $("#form1");
 		$("#submit").click(function(){
 			var json = JSON.parmsToJSON($form);
+			var $createFileNum = $('#createFileNum'),
+				$firstAccount = $('#firstAccount'),
+				$firstMacAddr = $('#firstMacAddr'),
+				$accountNum = $('#accountNum'),
+				$otherData = $('#otherData');
+			var macRegExp = new RegExp("^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$");
+			//var macRegExp = /^([A-Fa-f0-9]{2}:){5}[A-Fa-f0-9]{2}$/;
+			if($createFileNum.val() == "" 
+				|| !Number($createFileNum.val()))
+			{
+    				$.messager.alert("Error", "Invalid File Number", 'info');
+				return false;
+			}
+			if($firstAccount.val() == ""
+				|| !Number($firstAccount.val()))
+			{
+    				$.messager.alert("Error", "Invalid First Account", 'info');
+				return false;
+			}
+			if($accountNum.val() == ""
+				|| !Number($accountNum.val()))
+			{
+    				$.messager.alert("Error", "Invalid Account Number", 'info');
+				return false;
+			}
+
+			if(!macRegExp.test($firstMacAddr.val()))
+			{
+    				$.messager.alert("Error", "Invalid First Mac Address, for example: 80:82:87:04:1A:CC", 'info');
+				return false;
+			}
 			Page.postJSON({
 				url: '/createFile.cgi',
 				data: JSON.serializeToParms(json),
 				success: function(data){
-					AlertUtil.saveSuccess();
+    					$.messager.alert("Create File Path:", "File Path: " + data.return_prompt, 'info');
+				//	AlertUtil.saveSuccess();
 				}
 			});
 		});
@@ -100,31 +132,48 @@
 	</script>
 </head>
 <body>
+	<div style="margin: 40px 0px 0px 50px;">
 	<form id="form1">
 		<table>
 		<tbody>
 			<tr>
-				<td>Create File Number<td>
+				<td>Create File Number</td>
 				<td>
 					<input type="text" id="createFileNum" name="createFileNum" maxlength="3"/>
 				</td>
 			</tr>
 			<tr>
-				<td>First Account<td>
+				<td>First Account</td>
 				<td>
 					<input type="text" id="firstAccount" name="firstAccount"/>
 				</td>
 			</tr>
 			<tr>
-				<td>First MAC Address<td>
+				<td>Account Number</td>
+				<td>
+					<input type="text" id="accountNum" name="accountNum"/>
+				</td>
+			</tr>
+
+			<tr>
+				<td>First MAC Address</td>
 				<td>
 					<input type="text" id="firstMacAddr" name="firstMacAddr"/>
+				</td>
+			</tr>
+			<tr>
+				<td>Other Data(Section = Value)</td>
+				<td>
+					<textarea id="otherData" name="otherData" rows="10" cols="36"></textarea>
 				</td>
 			</tr>
 		</tbody>
 		</table>
 	</form>
-	<input type="submit" id="submit">
+	</div>
+	<div style="margin: 10px 10px 0px 50px;">
+		<input type="submit" id="submit" value="Submit"/>
+	<div>
 	<!--form method="post">
 	   网站名： <input name="name"><br>
 	   网站 URL： <input name="url"><br>
